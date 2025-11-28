@@ -1,0 +1,94 @@
+.landing-page {
+  width: 100%;
+  height: 100vh;      /* بدل min-height */
+  overflow: hidden;   /* يمنع أي scroll */
+}
+
+
+/* Hero Section */
+.hero {
+  min-height: 100vh;
+  background-size: cover;
+  background-position: center right; /* الصورة على اليمين */
+  position: relative;
+  display: flex;
+  align-items: center;
+  text-align: left; /* الكلام شمال */
+  justify-content: flex-start; /* يخلي المحتوى ناحية الشمال */
+  padding-left: 0%; /* مسافة من الشمال */
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6); /* layer فوق الصورة */
+}
+
+.hero .container {
+  position: relative;
+  z-index: 2;
+  max-width: 600px; /* عرض الكلام */
+  margin-left: 50px;  
+  padding-left: 0; /* يلغي البادنج الافتراضي */
+}
+
+.hero-title {
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+.hero-title span {
+  color: #ffcc00; /* أصفر */
+}
+
+.hero-subtitle {
+  margin: 20px 0;
+  font-size: 1.2rem;
+  max-width: 500px;
+  color: #ddd;
+}
+
+.hero-buttons .btn {
+  padding: 12px 25px;
+  font-size: 1.1rem;
+  border-radius: 30px;
+  transition: 0.3s ease-in-out;
+}
+
+.hero-buttons .btn:hover {
+  transform: translateY(-3px);
+}
+
+/* Stats Section */
+.stats {
+  background: #111;
+  padding: 60px 20px;
+}
+
+.stat-item {
+  margin: 20px;
+}
+
+.stat-item h2 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #ffcc00;
+}
+
+.stat-item p {
+  color: #ccc;
+  margin-top: 10px;
+}
+
+/* General Reset */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden; /* امنع بس السكروول الجانبي */
+}

@@ -1,0 +1,97 @@
+/* AdminDashboard.css */
+
+/* Dark Mode */
+.dashboard.dark-mode {
+  background: linear-gradient(180deg, #1f1f2e, #111123);
+  color: #fff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Light Mode */
+.dashboard {
+  display: flex;
+  min-height: 100vh;
+  background: #f4f6f9;
+  color: #333;
+  transition: all 0.3s ease;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 240px;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #2c2c44, #1a1a2e);
+  padding: 2rem 1rem;
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.sidebar h4 {
+  color: #fff;
+  font-weight: 600;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding-bottom: 0.5rem;
+}
+
+.sidebar .nav-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0.8rem 1rem;
+  color: #aaa;
+  text-decoration: none;
+  font-size: 1rem;
+  border-radius: 8px;
+  margin-bottom: 0.8rem;
+  transition: all 0.3s ease;
+}
+
+.sidebar .nav-link:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.sidebar .nav-link.active {
+  background: #3b3b6a;
+  color: #fff;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.15);
+}
+
+/* Content */
+.content {
+  flex: 1;
+  padding: 2rem;
+  background: linear-gradient(180deg, #fdfdfd, #f0f2f5);
+}
+
+/* Cards */
+.card {
+  border-radius: 1rem;
+  padding: 1.5rem;
+  background: #fff;
+  color: #333;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Dark Mode Cards */
+.dashboard.dark-mode .card {
+  background: #2c2c2c;
+  color: #fff;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+}
+
+/* Navbar */
+.navbar {
+  border-radius: 0 0 1rem 1rem;
+  padding: 1rem 2rem;
+  background: #3b3b6a;
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+}

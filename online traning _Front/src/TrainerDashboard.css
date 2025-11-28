@@ -1,0 +1,25 @@
+/* src/pages/TrainerDashboard.css */
+.dashboard {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 220px;
+  min-height: 100vh;
+}
+
+.sidebar .nav-link {
+  margin-bottom: 10px;
+  transition: 0.3s;
+}
+
+.sidebar .nav-link:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+}
+
+.content {
+  flex: 1;
+  background: #f8f9fa;
+}

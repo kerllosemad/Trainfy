@@ -1,0 +1,1158 @@
+src\components\HeroSection.css
+.hero {
+  background: linear-gradient(
+      rgba(0, 0, 0, 0.6),
+      rgba(0, 0, 0, 0.6)
+    ),
+    url("https://i.ibb.co/Mf7DYKn/gym-bg.jpg") center/cover no-repeat;
+  width: 100vw;   /* عرض كامل الشاشة */
+  height: 100vh;  /* ارتفاع كامل الشاشة */
+  position: relative;
+  overflow-x: hidden; /* منع أي تجاوز داخلي */
+}
+
+.hero h1 {
+  font-size: 3rem;
+  line-height: 1.2;
+}
+
+.text-highlight {
+  color: #fcd34d; /* أصفر فاتح */
+}
+
+.hero-img {
+  max-height: 400px;
+  border-radius: 12px;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.5);
+}
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden; /* يمنع scrollbar أفقي */
+  width: 100%;
+  height: 100%;
+}
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+__________________________
+src\components\HeroSection.jsx
+import React from "react";
+import "./HeroSection.css";
+import heroImage from "../assets/hero.png";
+
+export default function HeroSection({ handleStart }) {
+  return (
+    <section
+      className="text-white hero d-flex align-items-center"
+      style={{
+        backgroundImage: `url(${heroImage})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        width: "100vw",
+        height: "100vh",
+        position: "relative", // مهم للزرار
+        overflow: "hidden",
+      }}
+    >
+      <button
+        className="btn btn-warning fw-bold"
+        onClick={handleStart}
+        style={{
+          position: "absolute",
+          top: "400px", // يظهر فوق الصورة مباشرة
+          left: "50%",
+          transform: "translateX(-50%)",
+        }}
+      >
+        START NOW
+      </button>
+
+<div className="container text-center" style={{ zIndex: 2, position: "relative" }}>
+  <h1
+    style={{
+      fontSize: "3.5rem",
+      fontWeight: "800",
+      background: "linear-gradient(90deg, #fcd34d, #fbbf24)", // تدرج أصفر فاتح إلى أصفر داكن
+      WebkitBackgroundClip: "text",
+      WebkitTextFillColor: "transparent",
+      textShadow: "3px 3px 15px rgba(0,0,0,0.6)",
+      lineHeight: 1.2,
+      animation: "fadeInUp 1s ease-out forwards",
+      opacity: 0,
+    }}
+  >
+    Start your journey <br /> towards excellence today
+  </h1>
+</div>
+
+
+
+
+    </section>
+  );
+}
+
+_____________________________________________
+src\components\Navbar.js
+import { Link, useNavigate } from "react-router-dom";
+
+export default function Navbar({ user }) {
+  const navigate = useNavigate();
+
+  // تسجيل خروج → مسح البيانات + رجوع لصفحة تسجيل الدخول
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    navigate("/");
+  };
+
+  return (
+    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div className="container">
+        {/* اللوجو أو اسم الموقع */}
+        <Link className="navbar-brand" to="/">
+          Online Training
+        </Link>
+
+        {/* زرار القائمة في الموبايل */}
+        <button
+          className="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span className="navbar-toggler-icon"></span>
+        </button>
+
+        {/* عناصر النافبار */}
+        <div className="collapse navbar-collapse" id="navbarNav">
+          <ul className="navbar-nav me-auto">
+            {/* لينكات ديناميكية حسب دور المستخدم */}
+            {user?.role === "trainee" && (
+              <li className="nav-item">
+                <Link className="nav-link" to="/trainee">
+                  Dashboard
+                </Link>
+              </li>
+            )}
+
+            {user?.role === "trainer" && (
+              <li className="nav-item">
+                <Link className="nav-link" to="/trainer">
+                  Dashboard
+                </Link>
+              </li>
+            )}
+
+            {/* لينكات عامة */}
+            <li className="nav-item">
+              <Link className="nav-link" to="#">
+                About
+              </Link>
+            </li>
+          </ul>
+
+          {/* بيانات المستخدم + قائمة منسدلة */}
+          {user && (
+            <div className="dropdown">
+              <button
+                className="btn btn-outline-light dropdown-toggle"
+                type="button"
+                id="userMenu"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Hi, {user.name}
+              </button>
+              <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
+                <li>
+                  <Link className="dropdown-item" to="/profile">
+                    Profile
+                  </Link>
+                </li>
+                <li>
+                  <Link className="dropdown-item" to="/settings">
+                    Settings
+                  </Link>
+                </li>
+                <li><hr className="dropdown-divider" /></li>
+                <li>
+                  <button className="dropdown-item text-danger" onClick={handleLogout}>
+                    Logout
+                  </button>
+                </li>
+              </ul>
+            </div>
+          )}
+        </div>
+      </div>
+    </nav>
+  );
+}
+
+_____________________________________________
+src\pages\AdminDashboard.jsx
+import React from "react";
+import { Container, Card, Button } from "react-bootstrap";
+
+export default function AdminDashboard() {
+  return (
+    <Container className="mt-5">
+      <Card className="shadow p-4">
+        <h1 className="text-center mb-4">Admin Dashboard</h1>
+        <p className="text-center">
+          Welcome, Admin! Here you can manage trainers, trainees, and view system statistics.
+        </p>
+        <div className="d-flex justify-content-center gap-3 mt-4">
+          <Button variant="primary">Manage Trainers</Button>
+          <Button variant="success">Manage Trainees</Button>
+          <Button variant="warning">View Reports</Button>
+        </div>
+      </Card>
+    </Container>
+  );
+}
+
+_____________________________________________
+src\pages\LandingPage.jsx
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import HeroSection from "../components/HeroSection";
+
+export default function LandingPage() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const isLoggedIn = localStorage.getItem("isLoggedIn");
+    if (isLoggedIn === "true") {
+      navigate("/dashboard");
+    }
+  }, [navigate]);
+
+  const handleStart = () => {
+    navigate("/login");
+  };
+
+  return (
+    <div>
+      <HeroSection handleStart={handleStart} />
+    </div>
+  );
+}
+
+__________________________
+src\pages\Login.jsx
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "../LoginPage.css";
+
+export default function Login() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [role, setRole] = useState("trainee");
+  const [isRegister, setIsRegister] = useState(true);
+
+  const navigate = useNavigate();
+
+  // بيانات الأدمن (ثابتة)
+  const adminEmail = "admin@example.com";
+  const adminPassword = "admin123";
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // ✅ لو Admin
+    if (!isRegister && email === adminEmail && password === adminPassword) {
+      localStorage.setItem(
+        "user",
+        JSON.stringify({ name: "Admin", email, role: "admin" })
+      );
+      navigate("/admin-dashboard");
+      return;
+    }
+
+    // جِيب المستخدمين الحاليين من localStorage
+    let users = JSON.parse(localStorage.getItem("users")) || [];
+
+    if (isRegister) {
+      // ✅ تسجيل مستخدم جديد
+      const newUser = { name, email, password, role };
+      users.push(newUser);
+      localStorage.setItem("users", JSON.stringify(users));
+      localStorage.setItem("user", JSON.stringify(newUser));
+
+      // توجيه حسب دوره
+      navigate(role === "trainer" ? "/trainer" : "/trainee");
+    } else {
+      // ✅ تسجيل دخول
+      const existingUser = users.find(
+        (u) => u.email === email && u.password === password
+      );
+
+      if (existingUser) {
+        localStorage.setItem("user", JSON.stringify(existingUser));
+        navigate(existingUser.role === "trainer" ? "/trainer" : "/trainee");
+      } else {
+        alert("Invalid email or password!");
+      }
+    }
+  };
+
+  return (
+    <div className="d-flex align-items-center justify-content-center vh-100 bg-light">
+      <div
+        className="p-4 shadow card"
+        style={{ width: "100%", maxWidth: "400px" }}
+      >
+        <h2 className="mb-4 text-center">
+          {isRegister ? "Create Account" : "Login"}
+        </h2>
+
+        <form onSubmit={handleSubmit}>
+          {/* يظهر الاسم والدور فقط في Sign Up */}
+          {isRegister && (
+            <>
+              <div className="mb-3">
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Full Name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                />
+              </div>
+
+              <div className="mb-3">
+                <label className="form-check me-3">
+                  <input
+                    type="radio"
+                    className="form-check-input"
+                    name="role"
+                    value="trainee"
+                    checked={role === "trainee"}
+                    onChange={() => setRole("trainee")}
+                  />
+                  Trainee
+                </label>
+
+                <label className="form-check">
+                  <input
+                    type="radio"
+                    className="form-check-input"
+                    name="role"
+                    value="trainer"
+                    checked={role === "trainer"}
+                    onChange={() => setRole("trainer")}
+                  />
+                  Trainer
+                </label>
+              </div>
+            </>
+          )}
+
+          {/* Email + Password (مشتركين) */}
+          <div className="mb-3">
+            <input
+              type="email"
+              className="form-control"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+
+          <div className="mb-3">
+            <input
+              type="password"
+              className="form-control"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+
+          <button type="submit" className="btn btn-primary w-100">
+            {isRegister ? "Sign Up" : "Login"}
+          </button>
+        </form>
+
+        {/* تبديل بين Sign Up / Login */}
+        <p className="mt-3 text-center">
+          {isRegister ? (
+            <>
+              Already have an account?{" "}
+              <span
+                className="text-primary fw-bold"
+                style={{ cursor: "pointer" }}
+                onClick={() => setIsRegister(false)}
+              >
+                Login
+              </span>
+            </>
+          ) : (
+            <>
+              Don’t have an account?{" "}
+              <span
+                className="text-primary fw-bold"
+                style={{ cursor: "pointer" }}
+                onClick={() => setIsRegister(true)}
+              >
+                Sign Up
+              </span>
+            </>
+          )}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+_____________________________________________
+src\pages\Profile.js
+import { useEffect, useState } from "react";
+import Navbar from "../components/Navbar";
+
+export default function Profile() {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const savedUser = JSON.parse(localStorage.getItem("user"));
+    if (savedUser) setUser(savedUser);
+  }, []);
+
+  return (
+    <>
+      <Navbar user={user} />
+      <div className="container py-5">
+        <h2 className="mb-4">User Profile</h2>
+        {user ? (
+          <div className="p-3 shadow card">
+            <p><strong>Name:</strong> {user.name}</p>
+            <p><strong>Email:</strong> {user.email}</p>
+            <p><strong>Role:</strong> {user.role}</p>
+          </div>
+        ) : (
+          <div className="alert alert-warning">No user data found.</div>
+        )}
+      </div>
+    </>
+  );
+}
+
+_____________________________________________________
+src\pages\RegisterPage.jsx
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "../Auth.css";
+
+export default function RegisterPage() {
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [role, setRole] = useState("trainee");
+
+  const handleRegister = (e) => {
+    e.preventDefault();
+
+    const users = JSON.parse(localStorage.getItem("users")) || [];
+    const userExists = users.some((u) => u.email === email);
+
+    if (userExists) {
+      alert("User already exists!");
+      return;
+    }
+
+    const newUser = { email, password, role };
+    users.push(newUser);
+    localStorage.setItem("users", JSON.stringify(users));
+
+    alert("Account created successfully!");
+    navigate("/login");
+  };
+
+  return (
+    <div className="auth-page">
+      <div className="auth-container">
+        <h2>Create Account</h2>
+        <form onSubmit={handleRegister}>
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+
+          <div className="role-select">
+            <label>
+              <input
+                type="radio"
+                value="trainer"
+                checked={role === "trainer"}
+                onChange={(e) => setRole(e.target.value)}
+              />
+              Trainer
+            </label>
+            <label>
+              <input
+                type="radio"
+                value="trainee"
+                checked={role === "trainee"}
+                onChange={(e) => setRole(e.target.value)}
+              />
+              Trainee
+            </label>
+          </div>
+
+          <button type="submit">Register</button>
+        </form>
+        <p>
+          Already have an account?{" "}
+          <span
+            className="auth-link"
+            onClick={() => navigate("/login")}
+          >
+            Login
+          </span>
+        </p>
+      </div>
+    </div>
+  );
+}
+
+_____________________________________________
+src\pages\TraineeCourses.jsx
+import { Link } from "react-router-dom";
+
+export default function TraineeCourses() {
+  return (
+    <div className="container py-5">
+      <h2 className="mb-4">My Courses</h2>
+
+      <div className="p-3 shadow card">
+        <h5 className="mb-3">Subscribed Sports</h5>
+        <ul className="list-group list-group-flush">
+          <li className="list-group-item">Football with Coach Ahmed</li>
+          <li className="list-group-item">Swimming with Coach Sara</li>
+          <li className="list-group-item">Tennis with Coach Mona</li>
+        </ul>
+      </div>
+      
+
+      <Link to="/trainee" className="mt-3 btn btn-dark">
+        ⬅ Back to Dashboard
+      </Link>
+    </div>
+  );
+}
+
+_____________________________________________
+src\pages\TraineeDashboard.jsx
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import HeroSection from "../components/HeroSection.jsx";
+
+export default function TraineeDashboard() {
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const savedUser = JSON.parse(localStorage.getItem("user"));
+    if (!savedUser) {
+      navigate("/"); // لو مفيش يوزر → يرجع للـ Login
+    } else {
+      setUser(savedUser);
+    }
+  }, [navigate]);
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    navigate("/");
+  };
+
+  return (
+    <>
+      {/* Navbar */}
+      <nav className="shadow navbar navbar-expand-lg navbar-dark bg-primary">
+        <div className="container">
+          <Link className="navbar-brand fw-bold" to="/trainee">
+            🏋 Online Training
+          </Link>
+          <button
+            className="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#traineeNavbar"
+          >
+            <span className="navbar-toggler-icon"></span>
+          </button>
+          <div className="collapse navbar-collapse" id="traineeNavbar">
+            <ul className="navbar-nav ms-auto">
+              <li className="nav-item">
+                <Link className="nav-link" to="/trainee">
+                  Dashboard
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/trainee/sports">
+                  My Sports
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/trainee/profile">
+                  Profile
+                </Link>
+              </li>
+              <li className="nav-item">
+                <button
+                  onClick={handleLogout}
+                  className="btn btn-light btn-sm ms-2"
+                >
+                  Logout
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+
+      {/* Hero Section */}
+      <HeroSection />
+
+      {/* Page Content */}
+      <div className="container py-5">
+        <h2 className="mb-4 text-primary">Trainee Dashboard</h2>
+
+        {user && (
+          <div className="shadow-sm alert alert-info">
+            Welcome, <strong>{user.name}</strong> 👋 <br />
+            Your email: {user.email}
+          </div>
+        )}
+
+        {/* Cards */}
+        <div className="row">
+          <div className="mb-3 col-md-6">
+            <div className="border-0 shadow card">
+              <div className="card-body">
+                <h5 className="card-title">My Profile</h5>
+                <p className="card-text">
+                  View and edit your personal information.
+                </p>
+                <Link to="/trainee/profile" className="btn btn-primary">
+                  Go to Profile
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          <div className="mb-3 col-md-6">
+            <div className="border-0 shadow card">
+              <div className="card-body">
+                <h5 className="card-title">My Sports</h5>
+                <p className="card-text">
+                  Check your subscribed sports and coaches.
+                </p>
+                <Link to="/trainee/sports" className="btn btn-success">
+                  View Sports
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+__________________________
+src\pages\TraineeProfile.jsx
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+
+export default function TraineeProfile() {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const savedUser = JSON.parse(localStorage.getItem("user"));
+    if (savedUser) setUser(savedUser);
+  }, []);
+
+  return (
+    <div className="container py-5">
+      <h2 className="mb-4 text-primary">Trainee Profile</h2>
+
+      {user ? (
+        <div className="p-4 border-0 shadow-lg card">
+          <h5 className="mb-3"><i className="bi bi-person-circle"></i> {user.name}</h5>
+          <p><strong>Email:</strong> {user.email}</p>
+          <p><strong>Role:</strong> Trainee</p>
+          <Link to="/trainee" className="mt-3 btn btn-dark">⬅ Back</Link>
+        </div>
+      ) : (
+        <div className="alert alert-warning">No profile data found.</div>
+      )}
+    </div>
+  );
+}
+
+__________________________
+src\pages\TraineeSports.jsx
+import { Link } from "react-router-dom";
+
+export default function TraineeSports() {
+  return (
+    <div className="container py-5">
+      <h2 className="mb-4 text-success">My Sports</h2>
+
+      <div className="row">
+        <div className="mb-3 col-md-4">
+          <div className="border-0 shadow card">
+            <div className="card-body">
+              <h5 className="card-title">⚽ Football</h5>
+              <p className="card-text">With Coach Ahmed</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="mb-3 col-md-4">
+          <div className="border-0 shadow card">
+            <div className="card-body">
+              <h5 className="card-title">🏊 Swimming</h5>
+              <p className="card-text">With Coach Sara</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="mb-3 col-md-4">
+          <div className="border-0 shadow card">
+            <div className="card-body">
+              <h5 className="card-title">🎾 Tennis</h5>
+              <p className="card-text">With Coach Mona</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <Link to="/trainee" className="mt-3 btn btn-dark">⬅ Back</Link>
+    </div>
+  );
+}
+
+__________________________
+src\pages\TrainerDashboard.jsx
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import HeroSection from "../components/HeroSection.jsx";
+
+export default function TrainerDashboard() {
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
+
+  // عند أول تحميل للصفحة → نجيب بيانات المستخدم من localStorage
+  useEffect(() => {
+    const savedUser = JSON.parse(localStorage.getItem("user"));
+    if (!savedUser) {
+      navigate("/"); // لو مفيش يوزر → يرجع للـ Login
+    } else {
+      setUser(savedUser);
+    }
+  }, [navigate]);
+
+  // دالة تسجيل الخروج
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    navigate("/"); // يرجع لصفحة اللوجين
+  };
+
+  return (
+    <>
+      {/* Navbar */}
+      <nav className="shadow navbar navbar-expand-lg navbar-dark bg-dark">
+        <div className="container">
+          <Link className="navbar-brand fw-bold" to="/trainer">
+            🏋 Online Training
+          </Link>
+
+          {/* زرار الموبايل */}
+          <button
+            className="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#trainerNavbar"
+            aria-controls="trainerNavbar"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span className="navbar-toggler-icon"></span>
+          </button>
+
+          {/* القائمة */}
+          <div className="collapse navbar-collapse" id="trainerNavbar">
+            <ul className="navbar-nav ms-auto">
+              <li className="nav-item">
+                <Link className="nav-link" to="/trainer">
+                  Dashboard
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/trainer/trainees">
+                  My Trainees
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/trainer/profile">
+                  Profile
+                </Link>
+              </li>
+              <li className="nav-item">
+                <button
+                  onClick={handleLogout}
+                  className="btn btn-outline-light btn-sm ms-2"
+                >
+                  Logout
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+
+      {/* Hero Section */}
+      <HeroSection />
+
+      {/* Page Content */}
+      <div className="container py-5">
+        <h2 className="mb-4">Trainer Dashboard</h2>
+
+        {user && (
+          <div className="shadow-sm alert alert-success">
+            Hello Coach, <strong>{user.name}</strong> ⚡ <br />
+            Your email: {user.email}
+          </div>
+        )}
+
+        {/* مثال المتدربين */}
+        <div className="p-3 border-0 shadow card">
+          <h4>Your Trainees</h4>
+          <ul className="list-group list-group-flush">
+            <li className="list-group-item">Omar Hosny (Football)</li>
+            <li className="list-group-item">Ali Mahmoud (Swimming)</li>
+            <li className="list-group-item">Mona Ahmed (Tennis)</li>
+          </ul>
+        </div>
+      </div>
+    </>
+  );
+}
+
+__________________________
+src\pages\TrainerProfile.jsx
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+
+export default function TrainerProfile() {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const savedUser = JSON.parse(localStorage.getItem("user"));
+    if (savedUser) {
+      setUser(savedUser);
+    }
+  }, []);
+
+  return (
+    <div className="container py-5">
+      <h2 className="mb-4">Trainer Profile</h2>
+
+      {user ? (
+        <div className="p-3 shadow card">
+          <h5>Name: {user.name}</h5>
+          <p>Email: {user.email}</p>
+          <p>Role: Trainer</p>
+        </div>
+      ) : (
+        <div className="alert alert-warning">No profile data found.</div>
+      )}
+
+      <Link to="/trainer" className="mt-3 btn btn-dark">
+        ⬅ Back to Dashboard
+      </Link>
+    </div>
+  );
+}
+
+_____________________________________________
+src\pages\TrainerTrainees.jsx
+import { Link } from "react-router-dom";
+
+export default function TrainerTrainees() {
+  return (
+    <div className="container py-5">
+      <h2 className="mb-4">My Trainees</h2>
+
+      <div className="p-3 shadow card">
+        <h5 className="mb-3">Trainees List</h5>
+        <ul className="list-group list-group-flush">
+          <li className="list-group-item">Omar Hosny (Football)</li>
+          <li className="list-group-item">Ali Mahmoud (Swimming)</li>
+          <li className="list-group-item">Mona Ahmed (Tennis)</li>
+        </ul>
+      </div>
+
+      <Link to="/trainer" className="mt-3 btn btn-dark">
+        ⬅ Back to Dashboard
+      </Link>
+    </div>
+  );
+}
+
+__________________________
+src\api.js
+const API_BASE = "http://localhost:5000/api";
+
+export const login = async (email, password) => {
+  const res = await fetch(`${API_BASE}/login`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, password }),
+  });
+  return res.json();
+};
+__________________________
+app.jsx
+import { Routes, Route } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
+
+import LandingPage from "./pages/LandingPage";
+import Login from "./pages/Login";
+import RegisterPage from "./pages/RegisterPage";
+
+import TraineeDashboard from "./pages/TraineeDashboard";
+import TraineeProfile from "./pages/TraineeProfile";
+import TraineeCourses from "./pages/TraineeCourses";
+import TraineeSports from "./pages/TraineeSports";
+
+import TrainerDashboard from "./pages/TrainerDashboard";
+import TrainerTrainees from "./pages/TrainerTrainees";
+import TrainerProfile from "./pages/TrainerProfile";
+
+import AdminDashboard from "./pages/AdminDashboard"; // ✅ صفحة الأدمن
+
+function App() {
+  return (
+    <Routes>
+      {/* Landing Page */}
+      <Route path="/" element={<LandingPage />} />
+
+      {/* Login & Register */}
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<RegisterPage />} />
+
+      {/* Trainee */}
+      <Route path="/trainee" element={<TraineeDashboard />} />
+      <Route path="/trainee/profile" element={<TraineeProfile />} />
+      <Route path="/trainee/courses" element={<TraineeCourses />} />
+      <Route path="/trainee/sports" element={<TraineeSports />} />
+
+      {/* Trainer */}
+      <Route path="/trainer" element={<TrainerDashboard />} />
+      <Route path="/trainer/trainees" element={<TrainerTrainees />} />
+      <Route path="/trainer/profile" element={<TrainerProfile />} />
+
+      {/* Admin */}
+      <Route path="/admin-dashboard" element={<AdminDashboard />} />
+    </Routes>
+  );
+}
+
+export default App;
+_____________________________________________
+src\Auth.css
+.auth-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(135deg, #fcd34d, #fbbf24);
+  font-family: 'Poppins', sans-serif;
+}
+
+.auth-container {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  padding: 40px;
+  border-radius: 15px;
+  text-align: center;
+  width: 350px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.auth-container h2 {
+  color: #fff;
+  margin-bottom: 20px;
+}
+
+.auth-container input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 8px;
+}
+
+.auth-container button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 15px;
+  border: none;
+  border-radius: 8px;
+  background: #fcd34d;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.auth-container button:hover {
+  background: #fbbf24;
+}
+
+.role-select {
+  display: flex;
+  justify-content: space-around;
+  margin: 15px 0;
+  color: #fff;
+}
+
+.auth-link {
+  color: #fff;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+__________________________
+src\LoginPage.css
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #fcd34d, #fbbf24); /* تدرج أصفر */
+}
+
+.login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.login-container {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  padding: 50px;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  width: 350px;
+}
+
+.login-container h2 {
+  color: #fff;
+  margin-bottom: 30px;
+  font-size: 2rem;
+  text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+}
+
+.login-container input {
+  width: 100%;
+  padding: 15px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+}
+
+.login-container button {
+  width: 100%;
+  padding: 15px;
+  margin-top: 15px;
+  border: none;
+  border-radius: 10px;
+  background: #fcd34d;
+  color: #000;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.login-container button:hover {
+  background: #fbbf24;
+}
+
+.signup-link {
+  color: #fff;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+__________________________
+main.jsx
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
+import App from "./App";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+
+
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <React.StrictMode>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </React.StrictMode>
+);
+
+____________________________
+index.html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Online Training</title>
+    <link
+  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+  rel="stylesheet"
+/>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

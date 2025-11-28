@@ -1,0 +1,28 @@
+.dashboard {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 220px;
+  background: #212529;
+  color: #fff;
+}
+
+.sidebar .nav-link {
+  color: #bbb;
+  margin-bottom: 8px;
+}
+
+.sidebar .nav-link.active {
+  background: #ffc107;
+  color: #000;
+  border-radius: 6px;
+}
+
+.content {
+  flex: 1;
+  background: #f8f9fa;
+  padding: 20px;
+  overflow-y: auto;
+}
